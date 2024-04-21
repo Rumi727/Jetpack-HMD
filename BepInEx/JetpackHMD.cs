@@ -16,7 +16,7 @@ namespace Rumi.JetpackHMD
     {
         public const string modGuid = "Rumi.JetpackHMD";
         public const string modName = "JetpackHMD";
-        public const string modVersion = "1.0.2";
+        public const string modVersion = "1.0.3";
         
         public static Assembly currentAssembly => _currentAssembly ??= Assembly.GetExecutingAssembly();
         static Assembly? _currentAssembly;
