@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 185422590
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: jetpack_hmd
+      Dependencies: {}
