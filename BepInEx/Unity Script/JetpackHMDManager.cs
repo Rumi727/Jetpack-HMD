@@ -97,7 +97,7 @@ namespace Rumi.JetpackHMD
             if (canvasGroup == null)
                 return;
 
-            if (jetpackWarningCompatibleDisable)
+            if (!jetpackWarningCompatibleDisable)
             {
                 GameObject? jetpackMeterContainerObject = null;
                 {
@@ -162,6 +162,7 @@ namespace Rumi.JetpackHMD
             this.metaData = metaData;
 #endif
             canvasGroup = GetComponent<CanvasGroup>();
+            jetpackWarningCompatibleDisable = false;
 
             ScaleUpdate();
 
