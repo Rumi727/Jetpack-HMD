@@ -14,6 +14,8 @@ namespace Rumi.JetpackHMD
         {
             public Func<float> getSpeedEvent;
             public float multiplier;
+
+            public Color color;
         }
 
         public void Init(MetaData metaData)
@@ -22,6 +24,7 @@ namespace Rumi.JetpackHMD
             multiplier = metaData.multiplier;
 
             text = GetComponent<TMP_Text>();
+            text.color = metaData.color;
         }
 
         event Func<float>? getSpeedEvent;

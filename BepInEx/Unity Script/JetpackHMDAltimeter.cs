@@ -1,24 +1,28 @@
 #if UNITY_2017_1_OR_NEWER
 #nullable enable
 #endif
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Rumi.JetpackHMD
 {
     public sealed class JetpackHMDAltimeter : MonoBehaviour
     {
 #if UNITY_2017_1_OR_NEWER
-        [System.Serializable]
+        [Serializable]
 #endif
         public struct MetaData
         {
-            public Transform? targetTransform;
+            public Func<Transform?> getTargetTransform;
             public float multiplier;
 
             public int numberSpacing;
 
             public GameObject? altimeterPrefab;
+
+            public Color color;
         }
 
         public void Init(MetaData metaData)
@@ -30,7 +34,7 @@ namespace Rumi.JetpackHMD
             if (offset == null)
                 return;
 
-            targetTransform = metaData.targetTransform;
+            getTargetTransform = metaData.getTargetTransform;
             multiplier = metaData.multiplier;
 
             numberSpacing = metaData.numberSpacing;
@@ -46,16 +50,21 @@ namespace Rumi.JetpackHMD
             while (number <= 500)
             {
                 RectTransform meterRectTransform = (RectTransform)Instantiate(metaData.altimeterPrefab, offset).transform;
-
                 meterRectTransform.anchoredPosition = new Vector2(0, pos);
-                meterRectTransform.GetChild(0).GetComponent<TMP_Text>().text = number.ToString();
+
+                Image image = meterRectTransform.GetComponent<Image>();
+                image.color = metaData.color;
+
+                TMP_Text text = meterRectTransform.GetChild(0).GetComponent<TMP_Text>();
+                text.text = number.ToString();
+                text.color = metaData.color;
 
                 pos += posSpacing;
                 number += numberSpacing;
             }
         }
 
-        Transform? targetTransform;
+        event Func<Transform?>? getTargetTransform;
         float multiplier;
 
         const float posSpacing = 66;
@@ -64,6 +73,7 @@ namespace Rumi.JetpackHMD
         float altitude = 0;
         void LateUpdate()
         {
+            Transform? targetTransform = getTargetTransform?.Invoke();
             if (targetTransform == null)
                 return;
 

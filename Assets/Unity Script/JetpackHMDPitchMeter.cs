@@ -1,6 +1,7 @@
 #if UNITY_2017_1_OR_NEWER
 #nullable enable
 #endif
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -9,11 +10,11 @@ namespace Rumi.JetpackHMD
     public sealed class JetpackHMDPitchMeter : MonoBehaviour
     {
 #if UNITY_2017_1_OR_NEWER
-        [System.Serializable]
+        [Serializable]
 #endif
         public struct MetaData
         {
-            public Transform? targetTransform;
+            public Func<Transform?> getTargetTransform;
 
             public float posSpacing;
             public int numberSpacing;
@@ -24,10 +25,10 @@ namespace Rumi.JetpackHMD
 
         public void Init(MetaData metaData)
         {
-            if (metaData.targetTransform == null || metaData.minusPitchMeterPrefab == null || metaData.plusPitchMeterPrefab == null)
+            if (metaData.minusPitchMeterPrefab == null || metaData.plusPitchMeterPrefab == null)
                 return;
 
-            targetTransform = metaData.targetTransform;
+            getTargetTransform = metaData.getTargetTransform;
 
             posSpacing = metaData.posSpacing;
             numberSpacing = metaData.numberSpacing;
@@ -73,13 +74,14 @@ namespace Rumi.JetpackHMD
             }
         }
 
-        Transform? targetTransform;
+        event Func<Transform?>? getTargetTransform;
 
         float posSpacing = 0;
         int numberSpacing = 0;
         float pitch = 0;
         void LateUpdate()
         {
+            Transform? targetTransform = getTargetTransform?.Invoke();
             if (targetTransform == null)
                 return;
 

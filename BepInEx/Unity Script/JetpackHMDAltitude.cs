@@ -1,6 +1,7 @@
 #if UNITY_2017_1_OR_NEWER
 #nullable enable
 #endif
+using System;
 using UnityEngine;
 
 namespace Rumi.JetpackHMD
@@ -8,11 +9,11 @@ namespace Rumi.JetpackHMD
     public sealed class JetpackHMDAltitude : MonoBehaviour
     {
 #if UNITY_2017_1_OR_NEWER
-        [System.Serializable]
+        [Serializable]
 #endif
         public struct MetaData
         {
-            public Transform? targetTransform;
+            public Func<Transform?> getTargetTransform;
             public float multiplier;
         }
 
@@ -22,7 +23,7 @@ namespace Rumi.JetpackHMD
             if (offset == null)
                 return;
 
-            targetTransform = metaData.targetTransform;
+            getTargetTransform = metaData.getTargetTransform;
             multiplier = metaData.multiplier;
 
             digit100 = offset.GetChild(0);
@@ -31,7 +32,7 @@ namespace Rumi.JetpackHMD
             digit0_01 = offset.GetChild(3);
         }
 
-        Transform? targetTransform;
+        event Func<Transform?>? getTargetTransform;
         float multiplier = 1;
         Transform? digit100;
         Transform? digit10;
@@ -40,6 +41,7 @@ namespace Rumi.JetpackHMD
         float realAltitude = 0;
         void LateUpdate()
         {
+            Transform? targetTransform = getTargetTransform?.Invoke();
             if (targetTransform == null || digit100 == null || digit10 == null || digit1 == null || digit0_01 == null)
                 return;
             

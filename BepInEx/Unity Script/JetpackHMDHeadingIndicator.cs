@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using UnityEngine;
 
 namespace Rumi.JetpackHMD
@@ -6,19 +7,20 @@ namespace Rumi.JetpackHMD
     public sealed class JetpackHMDHeadingIndicator : MonoBehaviour
     {
 #if UNITY_2017_1_OR_NEWER
-        [System.Serializable]
+        [Serializable]
 #endif
         public struct MetaData
         {
-            public Transform? targetTransform;
+            public Func<Transform?> getTargetTransform;
         }
 
-        public void Init(MetaData metaData) => targetTransform = metaData.targetTransform;
+        public void Init(MetaData metaData) => getTargetTransform = metaData.getTargetTransform;
 
-        Transform? targetTransform;
+        event Func<Transform?>? getTargetTransform;
         float realYaw = 0;
         void Update()
         {
+            Transform? targetTransform = getTargetTransform?.Invoke();
             if (targetTransform == null)
                 return;
 
