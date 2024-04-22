@@ -438,10 +438,7 @@ MonoBehaviour:
   speed: 10
   altitude: 0
   metaData:
-    roll:
-      targetTransform: {fileID: 1674669961}
     pitchMeter:
-      targetTransform: {fileID: 1674669961}
       posSpacing: 75
       numberSpacing: 10
       minusPitchMeterPrefab: {fileID: 2635697567658020736, guid: 502041191cdbc15479ef956eac7d0153, type: 3}
@@ -453,10 +450,8 @@ MonoBehaviour:
       numberSpacing: 10
       speedMeterPrefab: {fileID: 7070551143147936299, guid: b5367d7151a5a6f44b819a68a7a9d3be, type: 3}
     altitude:
-      targetTransform: {fileID: 1674669961}
       multiplier: 1
     altimeter:
-      targetTransform: {fileID: 1674669961}
       multiplier: 1
       numberSpacing: 10
       altimeterPrefab: {fileID: 1114706214421464037, guid: 8aa596d8d94a82d4b884eea2331ad3a2, type: 3}
@@ -464,8 +459,9 @@ MonoBehaviour:
       multiplier: 1
     verticalSpeedIndicator:
       multiplier: 1
-    headingIndicator:
-      targetTransform: {fileID: 1674669961}
+    color:
+      serializedVersion: 2
+      rgba: 4278255360
 --- !u!1 &1609495767
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +627,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4438100381150989177, guid: e36558039a3196d4b87de098e5e7ddef, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000015258789
+      objectReference: {fileID: 0}
     - target: {fileID: 4797300559470313479, guid: e36558039a3196d4b87de098e5e7ddef, type: 3}
       propertyPath: m_Name
       value: Jetpack HMD
@@ -638,6 +638,10 @@ PrefabInstance:
     - target: {fileID: 5445933667765257416, guid: e36558039a3196d4b87de098e5e7ddef, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6828572395404374162, guid: e36558039a3196d4b87de098e5e7ddef, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000015258789
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

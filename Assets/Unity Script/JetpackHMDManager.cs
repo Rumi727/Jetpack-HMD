@@ -2,8 +2,8 @@
 #nullable enable
 #endif
 using System;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Rumi.JetpackHMD
 {
@@ -30,6 +30,8 @@ namespace Rumi.JetpackHMD
             public JetpackHMDVerticalSpeedIndicator.MetaData verticalSpeedIndicator;
 
             public JetpackHMDHeadingIndicator.MetaData headingIndicator;
+
+            public Color color;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -274,6 +276,10 @@ namespace Rumi.JetpackHMD
                     }
                 }
             }
+
+            Graphic[] graphics = GetComponentsInChildren<Graphic>(true);
+            for (int i = 0; i < graphics.Length; i++)
+                graphics[i].color = metaData.color;
         }
     }
 }

@@ -4,7 +4,6 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Rumi.JetpackHMD
 {
@@ -21,8 +20,6 @@ namespace Rumi.JetpackHMD
             public int numberSpacing;
 
             public GameObject? altimeterPrefab;
-
-            public Color color;
         }
 
         public void Init(MetaData metaData)
@@ -50,14 +47,9 @@ namespace Rumi.JetpackHMD
             while (number <= 500)
             {
                 RectTransform meterRectTransform = (RectTransform)Instantiate(metaData.altimeterPrefab, offset).transform;
+
                 meterRectTransform.anchoredPosition = new Vector2(0, pos);
-
-                Image image = meterRectTransform.GetComponent<Image>();
-                image.color = metaData.color;
-
-                TMP_Text text = meterRectTransform.GetChild(0).GetComponent<TMP_Text>();
-                text.text = number.ToString();
-                text.color = metaData.color;
+                meterRectTransform.GetChild(0).GetComponent<TMP_Text>().text = number.ToString();
 
                 pos += posSpacing;
                 number += numberSpacing;

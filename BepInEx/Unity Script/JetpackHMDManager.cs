@@ -2,8 +2,8 @@
 #nullable enable
 #endif
 using System;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Rumi.JetpackHMD
 {
@@ -31,35 +31,7 @@ namespace Rumi.JetpackHMD
 
             public JetpackHMDHeadingIndicator.MetaData headingIndicator;
 
-
-
-            public float colorR;
-            public float colorG;
-            public float colorB;
-
-            public float attitudeColorR;
-            public float attitudeColorG;
-            public float attitudeColorB;
-
-            public float speedColorR;
-            public float speedColorG;
-            public float speedColorB;
-
-            public float altitudeColorR;
-            public float altitudeColorG;
-            public float altitudeColorB;
-
-            public float accelerationColorR;
-            public float accelerationColorG;
-            public float accelerationColorB;
-
-            public float verticalSpeedColorR;
-            public float verticalSpeedColorG;
-            public float verticalSpeedColorB;
-
-            public float headingColorR;
-            public float headingColorG;
-            public float headingColorB;
+            public Color color;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -304,6 +276,10 @@ namespace Rumi.JetpackHMD
                     }
                 }
             }
+
+            Graphic[] graphics = GetComponentsInChildren<Graphic>(true);
+            for (int i = 0; i < graphics.Length; i++)
+                graphics[i].color = metaData.color;
         }
     }
 }

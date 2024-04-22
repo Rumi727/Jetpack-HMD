@@ -16,7 +16,7 @@ namespace Rumi.JetpackHMD
     {
         public const string modGuid = "Rumi.JetpackHMD";
         public const string modName = "JetpackHMD";
-        public const string modVersion = "1.0.5";
+        public const string modVersion = "1.1.0";
         
         public static Assembly currentAssembly => _currentAssembly ??= Assembly.GetExecutingAssembly();
         static Assembly? _currentAssembly;
@@ -65,6 +65,8 @@ namespace Rumi.JetpackHMD
             {
                 getEnableEvent = () => JetpackHMDPatches.playerControllerB != null && JetpackHMDPatches.playerControllerB.jetpackControls,
                 getScaleEvent = () => uiConfig?.scale ?? 1,
+
+                color = new Color32((byte)(uiConfig?.colorR ?? 0), (byte)(uiConfig?.colorG ?? 255), (byte)(uiConfig?.colorB ?? 0), (byte)(uiConfig?.colorA ?? 255)),
 
                 roll = new JetpackHMDRoll.MetaData()
                 {

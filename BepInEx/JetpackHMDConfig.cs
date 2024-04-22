@@ -62,12 +62,56 @@ namespace Rumi.JetpackHMD
         }
         ConfigEntry<int> _altimeterNumberSpacing;
 
+        public int colorR
+        {
+            get => _colorR?.Value ?? 0;
+            set => _colorR.Value = value;
+        }
+        ConfigEntry<int> _colorR;
+
+        public int colorG
+        {
+            get => _colorG?.Value ?? 255;
+            set => _colorG.Value = value;
+        }
+        ConfigEntry<int> _colorG;
+
+        public int colorB
+        {
+            get => _colorB?.Value ?? 0;
+            set => _colorB.Value = value;
+        }
+        ConfigEntry<int> _colorB;
+
+        public int colorA
+        {
+            get => _colorA?.Value ?? 255;
+            set => _colorA.Value = value;
+        }
+        ConfigEntry<int> _colorA;
+
 
 
         public JetpackHMDConfig(ConfigFile config)
         {
             _scale = config.Bind("General", "Scale", 1.5f, "Adjust the overall UI scale");
             LethalConfigManager.AddConfigItem(new FloatSliderConfigItem(_scale, new FloatSliderOptions() { Min = 0.5f, Max = 2f, RequiresRestart = false }));
+
+            _colorR = config.Bind("General", "R Color", 0, "");
+            _colorR.SettingChanged += (sender, e) => JetpackHMD.UILoad();
+            LethalConfigManager.AddConfigItem(new IntSliderConfigItem(_colorR, new IntSliderOptions() { Min = 0, Max = 255, RequiresRestart = false }));
+
+            _colorG = config.Bind("General", "G Color", 255, "");
+            _colorG.SettingChanged += (sender, e) => JetpackHMD.UILoad();
+            LethalConfigManager.AddConfigItem(new IntSliderConfigItem(_colorG, new IntSliderOptions() { Min = 0, Max = 255, RequiresRestart = false }));
+
+            _colorB = config.Bind("General", "B Color", 0, "");
+            _colorB.SettingChanged += (sender, e) => JetpackHMD.UILoad();
+            LethalConfigManager.AddConfigItem(new IntSliderConfigItem(_colorB, new IntSliderOptions() { Min = 0, Max = 255, RequiresRestart = false }));
+
+            _colorA = config.Bind("General", "A Color", 255, "");
+            _colorA.SettingChanged += (sender, e) => JetpackHMD.UILoad();
+            LethalConfigManager.AddConfigItem(new IntSliderConfigItem(_colorA, new IntSliderOptions() { Min = 0, Max = 255, RequiresRestart = false }));
 
             //Pitch Meter
             {

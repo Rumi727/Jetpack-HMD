@@ -2,8 +2,6 @@
 #nullable enable
 using System.IO;
 using UnityEditor;
-using UnityEditor.Compilation;
-using UnityEngine;
 
 namespace Rumi.JetpackHMD
 {
