@@ -38,15 +38,27 @@ namespace Rumi.JetpackHMD
             logger = Logger;
             config = Config;
 
-            uiConfig = new JetpackHMDConfig(config);
+            logger?.LogInfo($"Config Loading...");
+
+            try
+            {
+                uiConfig = new JetpackHMDConfig(config);
+            }
+            catch (Exception e)
+            {
+                uiConfig = null;
+
+                logger?.LogWarning(e);
+                logger?.LogWarning($"Failed to load config file\nSettings will be loaded with defaults!");
+            }
 
             logger?.LogInfo($"Asset Bundle Loading...");
             mainAssetBundle ??= LoadMainAssetBundle();
 
-            logger?.LogInfo($"Patch...");
+            logger?.LogInfo($"PlayerControllerB Patch...");
             harmony.PatchAll(typeof(JetpackHMDPatches));
 
-            logger?.LogInfo($"Event...");
+            logger?.LogInfo($"OnSceneRelayLoaded Event registration...");
             SceneManager.sceneLoaded += OnSceneRelayLoaded;
 
             logger?.LogInfo($"Plugin {modName} is loaded!");
@@ -61,20 +73,30 @@ namespace Rumi.JetpackHMD
         public static void UILoad()
         {
 #pragma warning disable IDE0031 // Null 전파 사용
+            Transform? GetPlayerTransform() => JetpackHMDPatches.playerControllerB != null ? JetpackHMDPatches.playerControllerB.transform : null;
+#pragma warning restore IDE0031 // Null 전파 사용
+            float GetSpeed()
+            {
+                if (JetpackHMDPatches.playerControllerB != null)
+                    return JetpackHMDPatches.playerControllerB.thisController.velocity.magnitude;
+
+                return 0;
+            }
+
             JetpackHMDManager.MetaData metaData = new JetpackHMDManager.MetaData()
             {
                 getEnableEvent = () => JetpackHMDPatches.playerControllerB != null && JetpackHMDPatches.playerControllerB.jetpackControls,
-                getScaleEvent = () => uiConfig?.scale ?? 1,
+                getScaleEvent = () => uiConfig?.scale ?? 1.5f,
 
                 color = new Color32((byte)(uiConfig?.colorR ?? 0), (byte)(uiConfig?.colorG ?? 255), (byte)(uiConfig?.colorB ?? 0), (byte)(uiConfig?.colorA ?? 255)),
 
                 roll = new JetpackHMDRoll.MetaData()
                 {
-                    getTargetTransform = () => JetpackHMDPatches.playerControllerB != null ? JetpackHMDPatches.playerControllerB.transform : null
+                    getTargetTransform = GetPlayerTransform
                 },
                 pitchMeter = new JetpackHMDPitchMeter.MetaData()
                 {
-                    getTargetTransform = () => JetpackHMDPatches.playerControllerB != null ? JetpackHMDPatches.playerControllerB.transform : null,
+                    getTargetTransform = GetPlayerTransform,
 
                     posSpacing = uiConfig?.pitchMeterPosSpacing ?? 75,
                     numberSpacing = uiConfig?.pitchMeterNumberSpacing ?? 10,
@@ -85,24 +107,12 @@ namespace Rumi.JetpackHMD
 
                 speedText = new JetpackHMDSpeedText.MetaData()
                 {
-                    getSpeedEvent = () =>
-                    {
-                        if (JetpackHMDPatches.playerControllerB != null)
-                            return JetpackHMDPatches.playerControllerB.thisController.velocity.magnitude;
-
-                        return 0;
-                    },
+                    getSpeedEvent = GetSpeed,
                     multiplier = uiConfig?.speedometerMultiplier ?? 1
                 },
                 speedometer = new JetpackHMDSpeedometer.MetaData()
                 {
-                    getSpeedEvent = () =>
-                    {
-                        if (JetpackHMDPatches.playerControllerB != null)
-                            return JetpackHMDPatches.playerControllerB.thisController.velocity.magnitude;
-
-                        return 0;
-                    },
+                    getSpeedEvent = GetSpeed,
                     multiplier = uiConfig?.speedometerMultiplier ?? 1,
 
                     numberSpacing = uiConfig?.speedometerNumberSpacing ?? 10,
@@ -111,12 +121,12 @@ namespace Rumi.JetpackHMD
 
                 altitude = new JetpackHMDAltitude.MetaData()
                 {
-                    getTargetTransform = () => JetpackHMDPatches.playerControllerB != null ? JetpackHMDPatches.playerControllerB.transform : null,
+                    getTargetTransform = GetPlayerTransform,
                     multiplier = uiConfig?.altimeterMultiplier ?? 1
                 },
                 altimeter = new JetpackHMDAltimeter.MetaData()
                 {
-                    getTargetTransform = () => JetpackHMDPatches.playerControllerB != null ? JetpackHMDPatches.playerControllerB.transform : null,
+                    getTargetTransform = GetPlayerTransform,
                     multiplier = uiConfig?.altimeterMultiplier ?? 1,
 
                     numberSpacing = uiConfig?.altimeterNumberSpacing ?? 10,
@@ -125,7 +135,7 @@ namespace Rumi.JetpackHMD
 
                 headingIndicator = new JetpackHMDHeadingIndicator.MetaData()
                 {
-                    getTargetTransform = () => JetpackHMDPatches.playerControllerB != null ? JetpackHMDPatches.playerControllerB.transform : null
+                    getTargetTransform = GetPlayerTransform
                 },
 
                 accelerationIndicator = new JetpackHMDAccelerationIndicator.MetaData()
@@ -151,7 +161,6 @@ namespace Rumi.JetpackHMD
                     multiplier = uiConfig?.speedometerMultiplier ?? 1
                 }
             };
-#pragma warning restore IDE0031 // Null 전파 사용
 
             GameObject? lethalHUD = GameObject.Find("IngamePlayerHUD");
             GameObject? jetpackHMDGameObject = LoadPrefab("Jetpack HMD");
