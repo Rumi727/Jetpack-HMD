@@ -38,6 +38,8 @@ namespace Rumi.JetpackHMD
             logger = Logger;
             config = Config;
 
+            logger?.LogInfo("Start loading plugin...");
+
             logger?.LogInfo($"Config Loading...");
 
             try
