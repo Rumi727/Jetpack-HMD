@@ -16,7 +16,7 @@ namespace Rumi.JetpackHMD
     {
         public const string modGuid = "Rumi.JetpackHMD";
         public const string modName = "JetpackHMD";
-        public const string modVersion = "1.1.0";
+        public const string modVersion = "1.2.0";
         
         public static Assembly currentAssembly => _currentAssembly ??= Assembly.GetExecutingAssembly();
         static Assembly? _currentAssembly;
@@ -87,7 +87,19 @@ namespace Rumi.JetpackHMD
 
             JetpackHMDManager.MetaData metaData = new JetpackHMDManager.MetaData()
             {
-                getEnableEvent = () => JetpackHMDPatches.playerControllerB != null && JetpackHMDPatches.playerControllerB.jetpackControls,
+                getEnableEvent = () =>
+                {
+                    if (JetpackHMDPatches.playerControllerB != null && JetpackHMDPatches.playerControllerB.jetpackControls)
+                    {
+                        if (uiConfig?.enableTulipSnakes ?? true)
+                            return true;
+
+                        return JetpackHMDPatches.playerControllerB.isHoldingObject && JetpackHMDPatches.playerControllerB.currentlyHeldObjectServer is JetpackItem;
+                    }
+
+                    return false;
+                },
+                getEnableWarningEvent = () => JetpackHMDPatches.playerControllerB != null && JetpackHMDPatches.playerControllerB.jetpackControls && JetpackHMDPatches.playerControllerB.isHoldingObject && JetpackHMDPatches.playerControllerB.currentlyHeldObjectServer is JetpackItem,
                 getScaleEvent = () => uiConfig?.scale ?? 1.5f,
 
                 color = new Color32((byte)(uiConfig?.colorR ?? 0), (byte)(uiConfig?.colorG ?? 255), (byte)(uiConfig?.colorB ?? 0), (byte)(uiConfig?.colorA ?? 255)),

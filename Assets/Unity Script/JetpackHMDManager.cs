@@ -15,6 +15,7 @@ namespace Rumi.JetpackHMD
         public struct MetaData
         {
             public Func<bool> getEnableEvent;
+            public Func<bool> getEnableWarningEvent;
             public Func<float> getScaleEvent;
 
             public JetpackHMDRoll.MetaData roll;
@@ -135,8 +136,15 @@ namespace Rumi.JetpackHMD
             {
                 if (canvasGroup.alpha > 0 && !jetpackMeterContainer.gameObject.activeSelf)
                     jetpackMeterContainer.gameObject.SetActive(true);
-
-                jetpackMeterContainer.alpha = canvasGroup.alpha;
+                
+                if (metaData.getEnableWarningEvent?.Invoke() ?? false)
+                {
+                    jetpackMeterContainer.alpha = Mathf.Lerp(jetpackMeterContainer.alpha, 1, 4 * Time.smoothDeltaTime);
+                    if (jetpackMeterContainer.alpha >= 0.99f)
+                        jetpackMeterContainer.alpha = 1;
+                }
+                else
+                    jetpackMeterContainer.alpha = Mathf.MoveTowards(jetpackMeterContainer.alpha, 0, 4 * Time.smoothDeltaTime);
 
                 float scale = Mathf.Clamp(metaData.getScaleEvent?.Invoke() ?? 1, 0.5f, 2f) * 0.5f;
                 ((RectTransform)jetpackMeterContainer.transform).anchoredPosition = new Vector2(72 * scale, 0);

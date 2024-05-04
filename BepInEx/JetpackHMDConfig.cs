@@ -90,6 +90,13 @@ namespace Rumi.JetpackHMD
         }
         ConfigEntry<int> _colorA;
 
+        public bool enableTulipSnakes
+        {
+            get => _enableTulipSnakes?.Value ?? true;
+            set => _enableTulipSnakes.Value = value;
+        }
+        ConfigEntry<bool> _enableTulipSnakes;
+
 
 
         public JetpackHMDConfig(ConfigFile config)
@@ -112,6 +119,10 @@ namespace Rumi.JetpackHMD
             _colorA = config.Bind("General", "A Color", 255, "");
             _colorA.SettingChanged += (sender, e) => JetpackHMD.UILoad();
             LethalConfigManager.AddConfigItem(new IntSliderConfigItem(_colorA, new IntSliderOptions() { Min = 0, Max = 255, RequiresRestart = false }));
+
+            _enableTulipSnakes = config.Bind("General", "Tulip Snake Enable", true, "Displays UI even when flying as Tulip Snake");
+            _enableTulipSnakes.SettingChanged += (sender, e) => JetpackHMD.UILoad();
+            LethalConfigManager.AddConfigItem(new BoolCheckBoxConfigItem(_enableTulipSnakes, false));
 
             //Pitch Meter
             {
