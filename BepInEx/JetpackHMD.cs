@@ -11,12 +11,11 @@ using UnityEngine.SceneManagement;
 namespace Rumi.JetpackHMD
 {
     [BepInPlugin(modGuid, modName, modVersion)]
-    [BepInDependency("ainavt.lc.lethalconfig")]
     public class JetpackHMD : BaseUnityPlugin
     {
         public const string modGuid = "Rumi.JetpackHMD";
         public const string modName = "JetpackHMD";
-        public const string modVersion = "1.2.0";
+        public const string modVersion = "1.2.1";
         
         public static Assembly currentAssembly => _currentAssembly ??= Assembly.GetExecutingAssembly();
         static Assembly? _currentAssembly;
