@@ -113,20 +113,15 @@ namespace Rumi.JetpackHMD
                     }
                 }
 
-                if (jetpackMeterContainerObject != null)
+                if (jetpackMeterContainerObject != null && jetpackMeterContainerObject.TryGetComponent<CanvasGroup>(out jetpackMeterContainer))
                 {
-                    jetpackMeterContainer = jetpackMeterContainerObject.GetComponent<CanvasGroup>();
+                    RectTransform rectTransform = (RectTransform)jetpackMeterContainer.transform;
 
-                    if (jetpackMeterContainer != null)
-                    {
-                        RectTransform rectTransform = (RectTransform)jetpackMeterContainer.transform;
+                    rectTransform.anchorMin = new Vector2(0.59f, 0.5f);
+                    rectTransform.anchorMax = new Vector2(0.59f, 0.5f);
 
-                        rectTransform.anchorMin = new Vector2(0.59f, 0.5f);
-                        rectTransform.anchorMax = new Vector2(0.59f, 0.5f);
-
-                        rectTransform.sizeDelta = new Vector2(18, 78.5f);
-                        rectTransform.pivot = new Vector2(0, 0.5f);
-                    }
+                    rectTransform.sizeDelta = new Vector2(18, 78.5f);
+                    rectTransform.pivot = new Vector2(0, 0.5f);
                 }
 
                 jetpackWarningCompatibleDisable = true;
